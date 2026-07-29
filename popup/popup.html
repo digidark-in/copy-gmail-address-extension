@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copy Gmail Address</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <img src="../icons/icon32.png" alt="Copy Gmail Address" width="20" height="20">
+        <h1>Copy Gmail Address</h1>
+      </div>
+    </header>
+
+    <!-- Email counter -->
+    <section class="count-section" id="countSection">
+      <div class="count-display">
+        <span class="count-number" id="emailCount">—</span>
+        <span class="count-label">unique email addresses found</span>
+      </div>
+    </section>
+
+    <!-- Action buttons -->
+    <section class="actions">
+      <button class="btn btn-primary" id="copyAllBtn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        Copy All Emails
+      </button>
+      <button class="btn btn-secondary" id="viewEmailsBtn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        View Emails
+      </button>
+    </section>
+
+    <!-- Email list (hidden by default) -->
+    <section class="email-list-section" id="emailListSection" hidden>
+      <div class="email-list-header">
+        <span>Found Emails</span>
+        <button class="btn-close" id="closeListBtn" aria-label="Close">✕</button>
+      </div>
+      <ul class="email-list" id="emailList"></ul>
+    </section>
+
+    <!-- Copied toast -->
+    <div class="toast" id="toast">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      Copied!
+    </div>
+
+    <!-- Divider -->
+    <hr class="divider">
+
+    <!-- Settings -->
+    <section class="settings">
+      <h2 class="settings-title">Settings</h2>
+
+      <label class="setting-row">
+        <div class="setting-info">
+          <span class="setting-name">Gmail copy buttons</span>
+        </div>
+        <input type="checkbox" id="enableGmail" class="toggle" checked>
+      </label>
+
+      <label class="setting-row">
+        <div class="setting-info">
+          <span class="setting-name">Account popup buttons</span>
+        </div>
+        <input type="checkbox" id="enableAccountPopup" class="toggle" checked>
+      </label>
+
+      <label class="setting-row">
+        <div class="setting-info">
+          <span class="setting-name">Auto-detect emails</span>
+        </div>
+        <input type="checkbox" id="enableAutoDetect" class="toggle" checked>
+      </label>
+
+      <label class="setting-row">
+        <div class="setting-info">
+          <span class="setting-name">Click email to copy</span>
+          <span class="setting-desc">Tap any email address to copy it</span>
+        </div>
+        <input type="checkbox" id="clickToCopy" class="toggle" checked>
+      </label>
+
+      <label class="setting-row">
+        <div class="setting-info">
+          <span class="setting-name">Hover-only buttons</span>
+        </div>
+        <input type="checkbox" id="hoverOnly" class="toggle">
+      </label>
+
+      <div class="setting-row setting-select-row">
+        <span class="setting-name">Copy format</span>
+        <select id="copyFormat" class="select">
+          <option value="email_only">Email only</option>
+          <option value="name_email">Name + Email</option>
+        </select>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>v1.0.0 · Privacy-first · No tracking</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+/* ── Google Bar icon (next to profile avatar) ─────────────────────────────── */
+/*
+ * The Google Bar is a flex row with its own CSS that:
+ *   - forces color on children (makes SVG dark via currentColor)
+ *   - stretches flex children if no explicit size is set
+ *
+ * Fixes applied here:
+ *   - Circular shape (50% radius) to match bar icon style
+ *   - Fixed 32×32 size + flex-shrink:0 to prevent stretching
+ *   - Explicit stroke colour on the SVG (not currentColor) to escape bar's color cascade
+ */
+
+[data-cga-bar-icon].cga-copy-btn {
+  width:        32px !important;
+  height:       32px !important;
+  min-width:    32px !important;
+  min-height:   32px !important;
+  max-width:    32px !important;
+  max-height:   32px !important;
+  padding:      6px  !important;
+  margin:       0 2px !important;
+  border-radius: 50% !important;
+  flex-shrink:  0    !important;
+  flex-grow:    0    !important;
+  align-self:   center !important;
+  background:   transparent !important;
+  border:       none !important;
+  box-shadow:   none !important;
+  color:        #5f6368 !important;
+}
+
+[data-cga-bar-icon].cga-copy-btn svg {
+  width:  18px !important;
+  height: 18px !important;
+  stroke: #5f6368 !important;  /* bypass currentColor — bar forces its own color */
+  fill:   none !important;
+  flex-shrink: 0 !important;
+}
+
+[data-cga-bar-icon].cga-copy-btn:hover {
+  background: rgba(0,0,0,0.06) !important;
+  transform: scale(1) !important;  /* no scale in the bar — too large at 32px */
+  box-shadow: none !important;
+}
+
+[data-cga-bar-icon].cga-copy-btn:hover svg {
+  stroke: #202124 !important;
+  transform: none !important;
+}
+
+[data-cga-bar-icon].cga-copy-btn.cga-copied svg {
+  stroke: #188038 !important;
+}
+
+/* ── Overlay (position:fixed) buttons for popup injection ─────────────────── */
+/* These live on <body>, never inside the popup, so overflow:hidden can't clip */
+
+[data-cga-overlay] {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
+  background: #fff !important;
+  border: 1px solid rgba(26,115,232,0.25) !important;
+  border-radius: 8px !important;
+}
+
+[data-cga-overlay]:hover {
+  border-color: rgba(26,115,232,0.5) !important;
+}
+
+/* ── Copy Button Base ──────────────────────────────────────────────────────── */
+
+.cga-copy-btn,
+.cga-copy-all-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  padding: 3px 6px;
+  margin: 0 2px;
+  border: none !important;
+  border-radius: 6px;
+  background: transparent !important;
+  color: #5f6368 !important;
+  cursor: pointer !important;
+  font-size: 12px;
+  font-family: inherit;
+  line-height: 1;
+  vertical-align: middle !important;
+  position: relative !important;
+  /* overflow must be VISIBLE so the ::after tooltip escapes the button bounds.
+     The ripple is clipped by .cga-ripple-wrap instead. */
+  overflow: visible !important;
+  outline: none !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.18s ease;
+  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+  flex-shrink: 0;
+  z-index: 9999;
+}
+
+.cga-copy-btn svg,
+.cga-copy-all-btn svg {
+  width: 13px !important;
+  height: 13px !important;
+  flex-shrink: 0;
+  display: block !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+/* ── Hover State ───────────────────────────────────────────────────────────── */
+
+.cga-copy-btn:hover,
+.cga-copy-all-btn:hover {
+  background: rgba(26, 115, 232, 0.12) !important;
+  color: #1a73e8 !important;
+  transform: scale(1.12);
+  box-shadow: 0 1px 4px rgba(26, 115, 232, 0.18) !important;
+}
+
+.cga-copy-btn:hover svg,
+.cga-copy-all-btn:hover svg {
+  transform: scale(1.15) rotate(-4deg);
+}
+
+/* ── Active / Press State ─────────────────────────────────────────────────── */
+
+.cga-copy-btn:active,
+.cga-copy-all-btn:active {
+  transform: scale(0.94) !important;
+  background: rgba(26, 115, 232, 0.2) !important;
+  transition-duration: 0.08s !important;
+}
+
+/* ── Copied / Success State ───────────────────────────────────────────────── */
+
+.cga-copy-btn.cga-copied,
+.cga-copy-all-btn.cga-copied {
+  color: #188038 !important;
+  background: rgba(24, 128, 56, 0.1) !important;
+  animation: cga-bounce-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.cga-copy-btn.cga-copied svg,
+.cga-copy-all-btn.cga-copied svg {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: cga-check-draw 0.32s ease-out 0.05s forwards;
+}
+
+@keyframes cga-bounce-in {
+  0%   { transform: scale(0.75); opacity: 0.6; }
+  55%  { transform: scale(1.2); }
+  100% { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes cga-check-draw {
+  0%   { stroke-dashoffset: 24; opacity: 0.5; }
+  100% { stroke-dashoffset: 0;  opacity: 1; }
+}
+
+/* ── Ripple — clipped by its own wrapper, not the button ──────────────────── */
+
+.cga-ripple-wrap {
+  position: absolute !important;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;        /* clips the ripple to button bounds */
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cga-ripple {
+  display: block;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(24, 128, 56, 0.28);
+  animation: cga-ripple-out 0.55s ease-out forwards;
+}
+
+@keyframes cga-ripple-out {
+  0%   { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* ── Tooltip (::after escapes button because overflow:visible) ────────────── */
+
+.cga-copy-btn::after,
+.cga-copy-all-btn::after {
+  content: attr(title);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  background: #202124;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 99999;
+  /* Ensure it renders above button's stacking context */
+  isolation: isolate;
+}
+
+.cga-copy-btn:hover::after,
+.cga-copy-all-btn:hover::after {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Don't show tooltip when it says "Copy email address" in copied state */
+.cga-copy-btn.cga-copied::after,
+.cga-copy-all-btn.cga-copied::after {
+  content: 'Copied!';
+  opacity: 1 !important;
+  color: #188038;
+  background: #e6f4ea;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Hover-Only Mode ─────────────────────────────────────────────────────── */
+
+.cga-hover-only {
+  opacity: 0 !important;
+  transition:
+    opacity 0.2s ease,
+    color 0.18s ease,
+    background 0.18s ease,
+    transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Show when parent or immediately preceding sibling is hovered */
+.cga-inline-wrap:hover .cga-hover-only,
+*:hover > .cga-hover-only,
+*:hover + .cga-hover-only,
+.cga-hover-only.cga-copied {
+  opacity: 1 !important;
+}
+
+/* ── Copy All Button ─────────────────────────────────────────────────────── */
+
+.cga-copy-all-btn {
+  padding: 4px 10px !important;
+  border-radius: 8px !important;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a73e8 !important;
+  background: rgba(26, 115, 232, 0.07) !important;
+  margin-top: 6px;
+  margin-left: 0;
+  border: 1px solid rgba(26, 115, 232, 0.22) !important;
+}
+
+.cga-copy-all-btn:hover {
+  background: rgba(26, 115, 232, 0.15) !important;
+  border-color: rgba(26, 115, 232, 0.4) !important;
+}
+
+/* ── Inline wrapper (for mailto: links) ──────────────────────────────────── */
+
+.cga-inline-wrap {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── Clickable email text (click-to-copy feature) ────────────────────────── */
+
+.cga-email-text {
+  /* inherit everything — no layout disruption */
+  font: inherit !important;
+  color: inherit !important;
+  letter-spacing: inherit !important;
+  word-spacing: inherit !important;
+  display: inline !important;
+}
+
+.cga-email-clickable {
+  cursor: pointer !important;
+  border-bottom: 1.5px dashed currentColor !important;
+  border-radius: 0 !important;
+  transition: color 0.15s ease, background 0.12s ease, border-color 0.15s ease !important;
+  padding-bottom: 0 !important;
+  position: relative !important;
+}
+
+.cga-email-clickable:hover {
+  color: #1a73e8 !important;
+  background: rgba(26, 115, 232, 0.07) !important;
+  border-bottom-style: solid !important;
+  border-radius: 2px !important;
+}
+
+.cga-email-clickable::after {
+  content: 'Click to copy';
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #202124;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 99999;
+}
+
+.cga-email-clickable:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.cga-email-copied {
+  color: #188038 !important;
+  border-bottom-color: #188038 !important;
+  border-bottom-style: solid !important;
+  animation: cga-email-flash 0.3s ease;
+}
+
+.cga-email-copied::after {
+  content: 'Copied!';
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+  background: #e6f4ea;
+  color: #188038;
+}
+
+@keyframes cga-email-flash {
+  0%   { opacity: 1; }
+  30%  { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* ── Dark mode ────────────────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  .cga-copy-btn,
+  .cga-copy-all-btn {
+    color: #9aa0a6 !important;
+  }
+  .cga-copy-btn:hover,
+  .cga-copy-all-btn:hover {
+    background: rgba(138, 180, 248, 0.14) !important;
+    color: #8ab4f8 !important;
+  }
+  .cga-copy-btn.cga-copied,
+  .cga-copy-all-btn.cga-copied {
+    color: #81c995 !important;
+    background: rgba(129, 201, 149, 0.14) !important;
+  }
+  .cga-copy-all-btn {
+    color: #8ab4f8 !important;
+    background: rgba(138, 180, 248, 0.08) !important;
+    border-color: rgba(138, 180, 248, 0.25) !important;
+  }
+  .cga-copy-btn::after,
+  .cga-copy-all-btn::after {
+    background: #e8eaed;
+    color: #202124;
+  }
+  .cga-copy-btn.cga-copied::after,
+  .cga-copy-all-btn.cga-copied::after {
+    color: #188038;
+    background: #e6f4ea;
+  }
+  .cga-email-clickable:hover {
+    color: #8ab4f8 !important;
+    background: rgba(138, 180, 248, 0.1) !important;
+    border-bottom-color: #8ab4f8 !important;
+  }
+  .cga-email-clickable::after {
+    background: #e8eaed;
+    color: #202124;
+  }
+  .cga-email-copied {
+    color: #81c995 !important;
+    border-bottom-color: #81c995 !important;
+  }
+  .cga-email-copied::after {
+    background: rgba(129, 201, 149, 0.15);
+    color: #81c995;
+  }
+}

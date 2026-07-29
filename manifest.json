@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "Copy Gmail Address",
+  "version": "1.0.0",
+  "description": "One-click copy for email addresses throughout Gmail and Google products. Privacy-friendly, no tracking, no data collection.",
+  "author": "DIGIDARK CORPORATION",
+  "homepage_url": "https://github.com/digidark-in/copy-gmail-address-extension",
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Copy Gmail Address"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mail.google.com/*",
+        "https://www.google.com/*",
+        "https://maps.google.com/*",
+        "https://drive.google.com/*",
+        "https://docs.google.com/*",
+        "https://sheets.google.com/*",
+        "https://calendar.google.com/*",
+        "https://photos.google.com/*",
+        "https://www.youtube.com/*",
+        "https://*.google.com/*"
+      ],
+      "js": [
+        "modules/utils.js",
+        "modules/clipboard.js",
+        "modules/copyButton.js",
+        "modules/emailCollector.js",
+        "content/observer.js",
+        "content/emailDetector.js",
+        "content/googleAccountPopup.js",
+        "content/gmail.js",
+        "content/textScanner.js"
+      ],
+      "css": ["styles/copyButton.css"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "permissions": [
+    "clipboardWrite",
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "https://*.google.com/*",
+    "https://www.youtube.com/*"
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "styles/*"],
+      "matches": ["https://*.google.com/*", "https://www.youtube.com/*"]
+    }
+  ]
+}
